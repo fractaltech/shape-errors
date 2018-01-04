@@ -78,6 +78,30 @@ class Shape {
       }
     });
   }
+
+  test(input={}) {
+    const invalidInputKeys = Object.keys(input).filter((k) => {
+      return this.validations.keys().indexOf(k) === -1;
+    });
+
+    if (invalidInputKeys.length > 0) {
+      return Promise.reject(new class extends Error {
+        constructor(items=[]) {
+          super(JSON.stringify(items), null, 2);
+        }
+      }(invalidInputKeys));
+    } else {
+      return this.errors(input).then((err) => {
+        if (err) {
+          return Promise.reject(new class extends Error {
+            constructor(data={}) {
+              super(JSON.stringify(data, null, 2));
+            }
+          }(err));
+        }
+      });
+    }
+  }
 }
 
 module.exports = Shape;
