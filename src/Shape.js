@@ -88,6 +88,7 @@ class Shape {
       return Promise.reject(new class extends Error {
         constructor(items=[]) {
           super(JSON.stringify(items), null, 2);
+          this.items = items;
         }
       }(invalidInputKeys));
     } else {
@@ -96,6 +97,7 @@ class Shape {
           return Promise.reject(new class extends Error {
             constructor(data={}) {
               super(JSON.stringify(data, null, 2));
+              this.data = data;
             }
           }(err));
         }
