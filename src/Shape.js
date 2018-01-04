@@ -100,6 +100,8 @@ class Shape {
               this.data = data;
             }
           }(err));
+        } else {
+          return input;
         }
       });
     }
