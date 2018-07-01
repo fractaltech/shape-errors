@@ -13,7 +13,7 @@ const s = new Shape({
 s.check(data).then(({result, errors}) => {})
 */
 
-const {assign, toPlainObject} = require('lodash');
+const {assign, toPlainObject, isFunction} = require('lodash');
 
 const isUsableObject = require('isusableobject');
 
@@ -55,7 +55,7 @@ class Shape {
       Array.from(this.validations.keys()).map((key) => {
         const err = this.validations.get(key)(input[key], input, key);
 
-        if (err instanceof Promise) {
+        if (isFunction(err.then)) {
           return err.then((err) => {
             return {key, err};
           });
