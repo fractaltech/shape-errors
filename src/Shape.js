@@ -55,7 +55,7 @@ class Shape {
       Array.from(this.validations.keys()).map((key) => {
         const err = this.validations.get(key)(input[key], input, key);
 
-        if (isFunction(err.then)) {
+        if (err && isFunction(err.then)) {
           return err.then((err) => {
             return {key, err};
           });
@@ -67,8 +67,7 @@ class Shape {
           return {key, err};
         }
       })
-    )
-    .then((checks) => {
+    ).then((checks) => {
       if (checks.filter(({err}) => !!err).length === 0) {
         return null;
       } else {
