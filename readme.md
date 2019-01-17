@@ -1,5 +1,5 @@
 # shape-errors
-### We follow <breaking>.<feature>.<fix> versioning.
+### We follow [breaking].[feature].[fix] versioning.
 
 ```js
 const shape = require('shape-erros');
