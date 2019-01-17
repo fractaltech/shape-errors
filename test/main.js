@@ -1,8 +1,8 @@
-const assert = require('assert');
+const tape = require('tape');
 const shape = require('../lib');
 
-(async () => {
-  console.log('testing shape invalid-keys');
+tape('shape-errors invalid-keys', async (t) => {
+  t.plan(1);
 
   const data = {
     foo: 'foo',
@@ -19,7 +19,5 @@ const shape = require('../lib');
 
   const errors = await validation.errors(data);
 
-  assert.ok(errors.fizz === 'invalid key');
-
-  console.log('it works');
-})();
+  t.equal(errors.fizz, 'invalid key');
+});

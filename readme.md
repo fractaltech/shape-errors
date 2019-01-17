@@ -1,4 +1,5 @@
 # shape-errors
+## v3.0.3
 ### We follow [breaking].[feature].[fix] versioning.
 
 ```js

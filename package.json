@@ -1,11 +1,11 @@
 {
   "name": "shape-errors",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "find errors in shapes of data in an async manner",
   "repository": "https://github.com/fractaltech/shape-errors",
   "main": "lib/index.js",
   "scripts": {
-    "test": "node test/main.js",
+    "test": "tape test/main.js",
     "build": "npm run clean && babel src/ --out-dir lib/",
     "watch": "npm run clean && babel -w src/ --out-dir lib/",
     "clean": "rm -rf lib/"
