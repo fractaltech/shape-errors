@@ -10,12 +10,10 @@ const s = new Shape({
   )
 })
 
-s.check(data).then(({result, errors}) => {})
+s.errors(data).then(({result, errors}) => {})
 */
-
-const {assign, toPlainObject, isFunction} = require('lodash');
-
-const isUsableObject = require('isusableobject');
+const {assign, toPlainObject} = require('lodash');
+const isusableobject = require('isusableobject');
 
 class Shape {
   constructor(validations=[]) {
@@ -25,7 +23,7 @@ class Shape {
   }
 
   addValidations(validations=[]) {
-    if (isUsableObject(validations)) {
+    if (isusableobject(validations)) {
       validations = toPlainObject(validations);
       validations = Object.keys(validations).map((k) => ({key: k, validation: validations[k]}));
     }
@@ -51,11 +49,21 @@ class Shape {
   }
 
   errors(input={}) {
+    const invalidInputKeysErr = Object.keys(input)
+      .filter((k) => {
+        return Array.from(this.validations.keys()).indexOf(k) === -1;
+      })
+      .reduce((err, k) => ({
+        ...err,
+        [k]: 'invalid key'
+      }), {})
+    ;
+
     return Promise.all(
       Array.from(this.validations.keys()).map((key) => {
         const err = this.validations.get(key)(input[key], input, key);
 
-        if (err && isFunction(err.then)) {
+        if (err instanceof Promise) {
           return err.then((err) => {
             return {key, err};
           });
@@ -68,42 +76,17 @@ class Shape {
         }
       })
     ).then((checks) => {
-      if (checks.filter(({err}) => !!err).length === 0) {
+      const checksFailed = checks.filter(({err}) => !!err);
+      const numInvalidInputKeysError = Object.keys(invalidInputKeysErr).length;
+
+      if (checksFailed.length === 0 && numInvalidInputKeysError === 0) {
         return null;
       } else {
         return checks.reduce((all, {key, err}) => {
           return assign(all, {[key]: err});
-        }, {});
+        }, invalidInputKeysErr);
       }
     });
-  }
-
-  test(input={}) {
-    const invalidInputKeys = Object.keys(input).filter((k) => {
-      return this.validations.keys().indexOf(k) === -1;
-    });
-
-    if (invalidInputKeys.length > 0) {
-      return Promise.reject(new class extends Error {
-        constructor(items=[]) {
-          super(JSON.stringify(items), null, 2);
-          this.items = items;
-        }
-      }(invalidInputKeys));
-    } else {
-      return this.errors(input).then((err) => {
-        if (err) {
-          return Promise.reject(new class extends Error {
-            constructor(data={}) {
-              super(JSON.stringify(data, null, 2));
-              this.data = data;
-            }
-          }(err));
-        } else {
-          return input;
-        }
-      });
-    }
   }
 }
 

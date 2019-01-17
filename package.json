@@ -1,11 +1,11 @@
 {
   "name": "shape-errors",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "description": "find errors in shapes of data in an async manner",
   "repository": "https://github.com/fractaltech/shape-errors",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node test/main.js",
     "build": "npm run clean && babel src/ --out-dir lib/",
     "watch": "npm run clean && babel -w src/ --out-dir lib/",
     "clean": "rm -rf lib/"
@@ -20,7 +20,8 @@
     "babel-preset-stage-0": "^6.5.0",
     "eslint": "^5.0.1",
     "eslint-plugin-babel": "^3.1.0",
-    "eslint-plugin-react": "^4.2.1"
+    "eslint-plugin-react": "^4.2.1",
+    "tape": "^4.9.2"
   },
   "dependencies": {
     "isusableobject": "^0.1.1",
