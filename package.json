@@ -1,6 +1,6 @@
 {
   "name": "shape-errors",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "find errors in shapes of data in an async manner",
   "repository": "https://github.com/fractaltech/shape-errors",
   "main": "lib/index.js",
